@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Note-Taking App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Note-Taking App</h1>
+  <textarea id="noteInput" placeholder="Enter your note here..."></textarea>
+  <br>
+  <button onclick="saveNote()">Save Note</button>
+  <button onclick="loadNotes()">Load Notes</button>
+
+  <script>
+    const noteInput = document.getElementById('noteInput');
+    const DATABASE_FILE = 'notes.txt';
+    let savedNotes = [];
+
+    function saveNote() {
+      const note = noteInput.value;
+      if (note.trim() !== '') {
+        const existingNotes = loadNotesFromFile();
+        existingNotes.push(note);
+        saveNotesToFile(existingNotes);
+        alert('Note saved successfully!');
+        noteInput.value = '';
+      } else {
+        alert('Please enter a note before saving.');
+      }
+    }
+
+    function loadNotes() {
+      const notes = loadNotesFromFile();
+      noteInput.value = notes.join('\n\n');
+    }
+
+    function loadNotesFromFile() {
+      try {
+        const fileContents = readFileSync(DATABASE_FILE, 'utf8');
+        return fileContents.trim().split('\n\n');
+      } catch (err) {
+        return [];
+      }
+    }
+
+    function saveNotesToFile(notes) {
+      const fileContents = notes.join('\n\n');
+      writeFileSync(DATABASE_FILE, fileContents, 'utf8');
+    }
+
+    function readFileSync(file, encoding) {
+      // Return the saved notes
+      return savedNotes.join('\n\n');
+    }
+
+    function writeFileSync(file, data, encoding) {
+      // Dummy implementation for testing
+      savedNotes = data.trim().split('\n\n');
+    }
+  </script>
+</body>
+</html>
